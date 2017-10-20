@@ -1,0 +1,130 @@
+<template lang="html">
+  <div class="car-list">
+    <div class="car-list-item" v-for="li in carType" @click="showDetail(li.id)">
+      <div class="item-left">
+        <div class="img-ct">
+          <img :src="li.picUrl">
+          <span class="left-icon">{{tag}}</span>
+        </div>
+      </div>
+      <div class="item-right">
+        <h2 class="list-item-title">{{li.carName}}</h2>
+        <p class="list-item-des">
+          {{li.carOwnerName}}
+        </p>
+        <div class="list-price">价格：
+          <em class="price">{{li.quotedPrice}}</em>
+          万
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+  export default{
+    props: {
+      carType: {
+        type: Array
+      }
+    },
+    data() {
+      return {
+      }
+    },
+    computed: {
+      tag() { // 不同模块的标签
+        let type = this.$store.getters.getTag
+        switch (type) {
+          case 0:
+            return '二手车'
+          case 1:
+            return '新车'
+          case 2:
+            return '进口车'
+        }
+      }
+    },
+    created() {
+    },
+    methods: {
+      showDetail(id) {
+        let type = this.$store.state.carTypeTitle
+        switch (type) {
+          case 0:
+            this.$router.push({name: 'SecondHandCarDetail'})
+            break
+          case 1:
+            this.$router.push({name: 'NewCarDetail'})
+            break
+          case 2:
+            this.$router.push({name: 'ImportCarDetail'})
+            break
+        }
+        this.$store.commit('CURRENT_DETAIL_ID', {currentDetailId: id})
+      }
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import url('../../common/less/index.less');
+.car-list{
+  margin: 0 16px;
+  .car-list-item{
+    display: flex;
+    min-height: 95px;
+    .border-1px();
+    &:last-child{
+      .border-none();
+     }
+    .item-left{
+      flex: 0 0 118px;
+      width: 118px;
+      .img-ct{
+        position: relative;
+        margin: 10px 15px 10px 0;
+        overflow: hidden;
+        img {
+          height: 80px;
+        }
+      }
+      .left-icon{
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 2px 4px;
+        font-size: 9px;
+        color: #fff;
+        line-height: 20px;
+        background: #ea5441;
+      }
+    }
+    .item-right{
+      flex: 1;
+      padding: 8px 0;
+      position: relative;
+      .list-item-title{
+        font-size: 14px;
+        line-height: 18px;
+      }
+      .list-item-des{
+        font-size: 11px;
+        color: #666;
+        line-height: 18px;
+      }
+      .list-price{
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        font-size: 11px;
+        color: #ff3c3c;
+        .price{
+          font-style: normal;
+          font-size: 14px;
+          font-weight: 800;
+        }
+      }
+    }
+  }
+}
+</style>

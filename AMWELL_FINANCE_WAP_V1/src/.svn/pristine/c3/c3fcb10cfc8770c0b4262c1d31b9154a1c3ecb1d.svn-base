@@ -1,0 +1,61 @@
+<template lang="html">
+<div class="news-detail">
+  <vheader></vheader>
+  <div class="border-1px"></div>
+  <div class="content-wrapper">
+    <div class="go-next">
+      <router-link to="/news"><< 公司新闻</router-link>
+    </div>
+    <h2 class="news-title">{{dataList.fullTitle}}</h2>
+    <div class="news-des">
+      作者：{{dataList.author}} {{dataList.author}}
+    </div>
+    <div class="news-content">
+      {{dataList.content}}
+    </div>
+  </div>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import vheader from '../Header/Header'
+  import axios from 'axios'
+  import qs from 'qs'
+  export default{
+    components: {
+      vheader
+    },
+    data() {
+      return {
+        dataList: []
+      }
+    },
+    created() {
+      this.getNewInfo()
+    },
+    methods: {
+      getNewInfo() {
+        axios.post('/publicNews/queryById', qs.stringify({
+          newsId: this.$store.state.newsId
+        })).then(res => {
+          this.dataList = res.data
+        })
+      }
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import url('../../common/less/index.less');
+  .content-wrapper{
+    margin: 0 20px;
+    .go-next{
+      margin: 10px 0;
+    }
+    .news-title{
+      font-size: 16px;
+    }
+    .news-des{
+      font-size: 12px;
+      margin-bottom: 20px;
+    }
+  }
+</style>

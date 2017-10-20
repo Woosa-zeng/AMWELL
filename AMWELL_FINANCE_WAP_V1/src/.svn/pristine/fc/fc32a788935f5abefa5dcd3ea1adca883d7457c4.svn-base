@@ -1,0 +1,272 @@
+<template lang="html">
+<div class="car-detail">
+  <section class="swiper-wrapper">
+    <swiper loop auto :list="swiperList" height="180px" @on-index-change="onIndexChange" dots-position="center"></swiper>
+  </section>
+  <section class="car-des">
+    <h2 class="car-name">奥迪A4L 2017款 Plus 40 TFSI 进取型</h2>
+    <div class="shop-addr">门店名称：<span>深圳市合和汽车服务有限公司</span></div>
+    <div class="price-ct">
+      <div class="car-price">价格：<em class="price">28.23</em>万</div>
+      <div class="look-car-btn" @click="showApplyBox">预约看车</div>
+    </div>
+  </section>
+  <div class="car-info-space"></div>
+  <section class="base-info">
+    <h2 class="car-detail-title">基本信息</h2>
+    <div class="car-detail-ct">
+      <group>
+        <cell title="车主" value="value"></cell>
+        <cell title="首次上牌" value="value"></cell>
+        <cell title="行程里数" value="value"></cell>
+        <cell title="排放标准" value="value"></cell>
+        <cell title="档位/排量" value="value"></cell>
+        <cell title="车辆性质" value="value"></cell>
+        <cell title="车辆颜色" value="value"></cell>
+        <cell title="维修保养" value="value"></cell>
+        <cell title="年检到期" value="value"></cell>
+        <cell title="交强险" value="value"></cell>
+        <cell title="商业险到期" value="value"></cell>
+        <cell title="看车城市" value="value"></cell>
+        <cell title="车辆描述" value=""></cell>
+      </group>
+    </div>
+  </section>
+  <div class="car-info-space"></div>
+  <section class="car-info">
+    <h2 class="car-detail-title">车辆信息</h2>
+    <div class="car-detail-ct">
+      <group>
+        <cell
+          :title="123"
+          is-link
+          :border-intent="false"
+          :arrow-direction="showContent002 ? 'up' : 'down'"
+          @click.native="showContent002 = !showContent002"></cell>
+        <template v-if="showContent002">
+          <div class="z-cell-car-detail">
+            <span class="circleFill"></span>
+            <span>标配</span>
+            <span class="circle"></span>
+            <span>选配</span>
+            <span class="line"></span>
+            <span>无</span>
+          </div>
+          <cell-box :border-intent="false" class="sub-item" >
+            <span class="cell-title">123</span> <span class="cell-ct">456</span>
+          </cell-box>
+        </template>
+      </group>
+    </div>
+  </section>
+  <section class="img-info">
+    <h2 class="car-detail-title">车辆图片</h2>
+    <div class="car-detail-ct">
+      <img>
+    </div>
+  </section>
+  <div v-transfer-dom>
+    <x-dialog :show.sync="applyBox" class="dialog-demo">
+      <div class="input-box">
+        <input v-model="userName" placeholder="申请人名称">
+        <input v-model="userPhone" placeholder="申请人联系电话">
+        <div class="apply-btn">立即预约</div>
+      </div>
+      <div @click="applyBox=false">
+        <span class="vux-close"></span>
+      </div>
+    </x-dialog>
+  </div>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import { Swiper, GroupTitle, SwiperItem, XButton, Divider, Cell, Group, CellFormPreview, CellBox, XInput, XDialog, TransferDomDirective as TransferDom, Icon } from 'vux'
+  const baseList = [{
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }]
+  export default{
+    directives: {
+      TransferDom
+    },
+    data() {
+      return {
+        userName: '',
+        userPhone: '',
+        applyBox: false,
+        swiperList: baseList,
+        swiperIndex: 0,
+        showContent002: false,
+        list: [{
+          label: 'Apple',
+          value: '3.29'
+        }, {
+          label: 'Banana',
+          value: '1.04'
+        }, {
+          label: 'Fish',
+          value: '8.00'
+        }]
+      }
+    },
+    created() {},
+    methods: {
+      onIndexChange(index) {
+        this.swiperIndex = index
+      },
+      showApplyBox() {
+        this.applyBox = true
+      }
+    },
+    components: {
+      Swiper,
+      GroupTitle,
+      SwiperItem,
+      XButton,
+      Divider,
+      Cell,
+      Group,
+      CellFormPreview,
+      CellBox,
+      XInput,
+      XDialog,
+      Icon
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scope>
+  @import url('../../common/less/index.less');
+  @import '~vux/src/styles/close';
+  .car-detail{
+    .car-des{
+      margin: 15px;
+    }
+    .car-name{
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .shop-addr{
+      font-size: 12px;
+      line-height: 27px;
+    }
+    .price-ct{
+      display: flex;
+      margin-top: 10px;
+      .car-price{
+        flex: 1;
+      }
+      .look-car-btn{
+        flex: 0 0 64px;
+        width: 64px;
+        color: #fff;
+        height: 25px;
+        line-height:25px;
+        font-size: 11px;
+        text-align: center;
+        border-radius: 3px;
+        .bg-base-r-l;
+      }
+    }
+    .car-price{
+      color: #ff3c3c;
+      font-size: 14px;
+      .price{
+        font-style: normal;
+        font-size: 17px;
+        font-weight: 800;
+      }
+    }
+  }
+  .car-info-space{
+    height: 15px;
+    width: 100%;
+    background: #f5f5f5;
+  }
+  .car-detail-title{
+    font-size: 14px;
+    font-weight: 800;
+    margin-left: 17px;
+    line-height: 50px;
+  }
+  .car-detail-ct{
+    margin-left: 17px;
+  }
+  .weui-cells{
+    font-size: 14px !important;
+  }
+  .z-cell-car-detail{
+    position: relative;
+    font-size: 12px;
+    line-height: 40px;
+    text-align: right;
+    .border-1px-top();
+    .circle, .circleFill{
+      box-sizing: border-box;
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .circleFill{
+      background-color: #1A1A1A;
+    }
+    .circle{
+      border: 1px solid #1A1A1A;
+    }
+    .line{
+      display: inline-block;
+      width: 10px;
+      height: 2px;
+      background: #1A1A1A;
+      transform: translateY(-3px);
+    }
+    span{
+      &:last-child{
+         margin-right: 15px;
+       }
+    }
+  }
+  .cell-title{
+    min-width: 70px;
+    display: inline-block;
+  }
+  .input-box{
+    height: 150px;
+    padding: 20px 15px;
+    text-align: center;
+    overflow: hidden;
+    input{
+      box-sizing: border-box;
+      width: 100%;
+      height: 44px;
+      line-height: 44px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      text-indent: 10px;
+      outline: none;
+    }
+    .apply-btn{
+      width: 100%;
+      height: 44px;
+      line-height: 44px;
+      text-align: center;
+      border-radius: 5px;
+      color: #fff;
+      .bg-base-r-l();
+    }
+  }
+  .vux-close {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+</style>

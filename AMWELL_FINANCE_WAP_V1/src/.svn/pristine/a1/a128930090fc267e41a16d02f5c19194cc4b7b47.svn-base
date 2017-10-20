@@ -1,0 +1,45 @@
+.border-1px(@color: #e5e5e5){
+  position: relative;
+  &:after{
+    display: block;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    border-bottom: 1px solid @color;
+    content: '';
+  }
+}
+.border-none(){
+  &:after {
+    display: none;
+  }
+}
+.bg-img(@url: "./sell_car_01_") {
+  background-image: url("@{url}2x.png");
+  background-size: cover;
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3) {
+    background-image: url("@{url}3x.png");
+    background-size: cover;
+  }
+}
+.bg-base-l-r(@orange: #fa7d47,@light-orange: #ea5441){
+  background: #ea5441;
+  background: -webkit-linear-gradient(left,@orange,@light-orange);
+  background: -o-linear-gradient(left,@orange,@light-orange);
+  background: -moz-linear-gradient(left,@orange,@light-orange);
+  background: linear-gradient(to right,@orange,@light-orange);
+}
+.bg-base-r-l(@orange: #ea5441,@light-orange: #fa7d47){
+  background: #ea5441;
+  background: -webkit-linear-gradient(left,@orange,@light-orange);
+  background: -o-linear-gradient(left,@orange,@light-orange);
+  background: -moz-linear-gradient(left,@orange,@light-orange);
+  background: linear-gradient(to right,@orange,@light-orange);
+}
+.bgimg-base-t-b(@light-orange: #ea5441,@orange: #fa7d47){
+  background-image: -webkit-linear-gradient(top,@light-orange ,@orange);
+  background-image: -o-linear-gradient(top,@light-orange ,@orange);
+  background-image: -moz-linear-gradient(top,@light-orange ,@orange);
+  background-image: linear-gradient(to top,@light-orange ,@orange);
+}

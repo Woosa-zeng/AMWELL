@@ -1,0 +1,105 @@
+<template lang="html">
+  <div class="price layer-wrapper">
+    <div class="layer-left" @click="close"></div>
+    <div class="layer-container">
+      <div class="group-kind">默认</div>
+      <div class="item-group">
+        <div class="series-cell" @click="showCarSeries(-1, -1)" :class="{'active': base}">
+          不限价格
+        </div>
+      </div>
+      <div class="group-kind">价格</div>
+      <div class="item-group" v-for="item in priceList">
+        <div class="series-cell" @click="showCarSeries(item.start, item.end)">{{item.text}}</div>
+      </div>
+    </div>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+  export default{
+    data() {
+      return {
+        base: true,
+        priceList: [
+          {
+            start: 0,
+            end: 5,
+            text: '5万以下'
+          },
+          {
+            start: 5,
+            end: 8,
+            text: '5-8万'
+          },
+          {
+            start: 8,
+            end: 10,
+            text: '8-10万'
+          },
+          {
+            start: 10,
+            end: 15,
+            text: '10-15万'
+          },
+          {
+            start: 15,
+            end: 20,
+            text: '15-20万'
+          },
+          {
+            start: 20,
+            end: 30,
+            text: '20-30万'
+          },
+          {
+            start: 30,
+            end: 50,
+            text: '30-50万'
+          },
+          {
+            start: 50,
+            end: 80,
+            text: '50-80万'
+          },
+          {
+            start: 80,
+            end: 100,
+            text: '80-100万'
+          },
+          {
+            start: 100,
+            end: -1,
+            text: '100万以上'
+          }
+        ]
+      }
+    },
+    created() {},
+    methods: {
+      close() {
+        this.$emit('close', false)
+      },
+      showCarSeries(start, end) {
+        this.$emit('price', {start, end})
+        this.$store.commit('PRICE_START', {priceStart: start})
+        this.$store.commit('PRICE_END', {priceEnd: end})
+      }
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less">
+  @import url('../../common/less/index.less');
+  .price{
+    .series-cell{
+      height: 44px;
+      line-height: 44px;
+      margin-left: 16px;
+      font-size: 12px;
+      color: #666;
+    .border-1px();
+    }
+    .active{
+      color: #ea5441;
+    }
+  }
+</style>

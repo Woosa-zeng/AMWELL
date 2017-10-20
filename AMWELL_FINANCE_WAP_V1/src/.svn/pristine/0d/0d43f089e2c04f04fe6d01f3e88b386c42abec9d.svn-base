@@ -1,0 +1,275 @@
+<template>
+  <div class="index-page">
+    <vheader></vheader>
+    <section class="swiper-wrapper">
+      <swiper loop auto :list="swiperList" height="180px" @on-index-change="onIndexChange" dots-position="center"></swiper>
+    </section>
+    <section class="company-des">
+      <div class="header">
+        <h2 class="des-h2-title">
+          用车找我汽车产业链
+        </h2>
+        <div class="space"></div>
+      </div>
+      <div class="dec-content">
+        <div class="ct-wrapper">
+          <div class="item-cell">
+            <img src="./index_1.png" alt="">
+            <h3 class="item-h3-title">二手车交易</h3>
+            <p class="des">
+              汇聚全国海量二手车车源，真实有效、可靠的资讯。
+            </p>
+          </div>
+          <div class="item-cell">
+            <img src="./index_2.png" alt="">
+            <h3 class="item-h3-title">新车</h3>
+            <p class="des">
+              超低价购新车，快速提车，畅享有车好生活！
+            </p>
+          </div>
+        </div>
+        <div class="ct-wrapper">
+          <div class="item-cell">
+            <img src="./index_3.png" alt="">
+            <h3 class="item-h3-title">平行进口车</h3>
+            <p class="des">
+              世界名车，进口新车，手续齐全，省心靠谱！
+            </p>
+          </div>
+          <div class="item-cell">
+            <img src="./index_4.png" alt="">
+            <h3 class="item-h3-title">汽车金融</h3>
+            <p class="des">
+              车商贷、车抵贷、以租代购等多种车贷方案。
+            </p>
+          </div>
+        </div>
+        <div class="ct-wrapper">
+          <div class="item-cell">
+            <img src="./index_5.png" alt="">
+            <h3 class="item-h3-title">租车服务</h3>
+            <p class="des">
+              上万家租赁服务商与交易经销商，让用车出行更随心！
+            </p>
+          </div>
+          <div class="item-cell">
+            <img src="./index_6.png" alt="">
+            <h3 class="item-h3-title">云服务</h3>
+            <p class="des">
+              致力于为用车行业提供最智能、最高效的汽车租赁系统。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="company-news sec">
+      <h2 class="h2-title">公司新闻</h2>
+      <div class="item-news">
+        <div class="item" @click="showNewsDetail(li.newsId)" v-for="li in newsList">
+          <img :src="li.ftpPicUrl" class="item-img">
+          <div class="item-date">
+            {{li.updateOn}}
+          </div>
+          <div class="item-title">{{li.fullTitle}}</div>
+        </div>
+        <div class="show-more" @click="showMoreNews">
+          <img src="./arrow_icon.png" width="26" class="arrow-img">
+          <span>更多活动</span>
+        </div>
+      </div>
+    </section>
+    <section class="sec">
+      <div class="border-1px"></div>
+    </section>
+    <section class="activities sec">
+      <h2 class="h2-title">活动专区</h2>
+      <div class="item-activities" >
+        <div class="item" v-for="li in activeList" @click="showActivitiesDetail(li.activityId)">
+          <img :src="li.fullfigureUrl" class="item-img">
+          <div class="item-date activities-data">
+            开始时间{{li.stratOn}} <br> 结束时间{{li.endOn}}
+          </div>
+          <div class="item-title">{{li.activityName}}</div>
+        </div>
+        <div class="show-more" @click="showMoreActivities">
+          <img src="./arrow_icon.png" width="26" class="arrow-img">
+          <span>更多活动</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+<script>
+  import axios from 'axios'
+  import qs from 'qs'
+  import {reqIp} from '../../common/js/reqIp'
+  import { Swiper, GroupTitle, SwiperItem, XButton, Divider } from 'vux'
+  import vheader from '../Header/Header'
+  const baseList = [{
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }]
+  export default {
+    data() {
+      return {
+        swiperList: baseList,
+        swiperIndex: 0,
+        newsList: [],
+        activeList: []
+      }
+    },
+    created() {
+      this.getNews()
+      this.getActivities()
+    },
+    mounted() {
+      reqIp()
+    },
+    methods: {
+      getNews() {
+        axios.post('/publicNews/queryByPage', qs.stringify({
+          pageNum: 1,
+          pageSize: 2
+        })).then(res => {
+          this.newsList = res.data.list
+        })
+      },
+      getActivities() {
+        axios.post('/publicActivity/queryByPage', qs.stringify({
+          pageNum: 1,
+          pageSize: 2
+        })).then(res => {
+          this.activeList = res.data.list
+        })
+      },
+      showMoreActivities() {
+        this.$router.push({name: 'ActivitiesList'})
+      },
+      showActivitiesDetail(id) {
+        this.$store.commit('ACTIVITIES_ID', {activitiesId: id})
+        this.$router.push({name: 'ActivitiesDetail'})
+      },
+      showNewsDetail(id) {
+        this.$store.commit('NEWS_ID', {newsId: id})
+        this.$router.push({name: 'CompanyNewsDetail'})
+      },
+      showMoreNews() {
+        this.$router.push({name: 'NewsList'})
+      },
+      onIndexChange(index) {
+        this.swiperIndex = index
+      }
+    },
+    components: {
+      Swiper,
+      GroupTitle,
+      SwiperItem,
+      XButton,
+      Divider,
+      vheader
+    }
+  }
+</script>
+
+<style lang="less" rel="stylesheet/less" scoped>
+  @import url('../../common/less/index.less');
+  .index-page{
+    background: #fff;
+  }
+  .header{
+    overflow: hidden;
+  }
+  .company-des{
+    background: #f8f8f8;
+    overflow: hidden;
+    .des-h2-title{
+      margin-top: 40px;
+      text-align: center;
+      font-size: 17px;
+    }
+    .dec-content{
+      width:100%;
+      margin-top: 10px;
+      margin-bottom: 20px;
+      .ct-wrapper{
+        display: flex;
+        padding: 0 10px;
+      }
+      .item-cell{
+        flex: 1;
+        border-radius: 6px;
+        background: #fff;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        padding: 20px 10px;
+        &:nth-child(1){
+           margin-left:10px;
+        }
+         img{
+           display: block;
+           width: 50%;
+           margin: 0 auto;
+         }
+        .item-h3-title{
+          text-align: center;
+          line-height: 45px;
+          font-size:15px;
+          font-weight: 700;
+          color: #ea5441;
+        }
+        .des{
+          font-size: 11px;
+          text-align: center;
+          color: #666;
+        }
+      }
+    }
+  }
+  .sec{
+    margin: 0 20px;
+  }
+  .company-news, .activities{
+    .h2-title{
+      font-size: 17px;
+      font-weight: 800;
+      line-height: 75px;
+    }
+    .item-img{
+      display: block;
+      height: 150px;
+      margin: 0 auto;
+    }
+    .item-date{
+      line-height: 40px;
+      font-size: 11px;
+      color: #666;
+    }
+    .activities-data{
+      line-height:20px;
+    }
+    .item-title{
+      font-size: 17px;
+    }
+    .show-more{
+      display: block;
+      width: 50%;
+      line-height: 75px;
+      color: #3096f0;
+      .arrow-img{
+        display: inline-block;
+        line-height: 75px;
+        vertical-align: middle;
+        margin-right: 10px;
+      }
+    }
+  }
+</style>

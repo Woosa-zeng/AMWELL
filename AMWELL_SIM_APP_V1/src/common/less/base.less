@@ -1,0 +1,15 @@
+@blue: #367a9a;
+@middle-blue: #128bca;
+@light-blue: #f2fbff;
+@b-gray: #e6e6e6;
+.clearfix {
+  display: inline-block;
+  &:after{
+    display: block;
+    content: ".";
+    height: 0;
+    line-height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+}

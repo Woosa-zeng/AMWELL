@@ -1,0 +1,127 @@
+<template lang="html">
+<div class="news-list">
+  <vheader></vheader>
+  <div class="border-1px"></div>
+  <h2 class="list-h2-title">公司新闻</h2>
+  <div class="list-content" ref="listwrapper">
+    <scroll class="wrapper"
+            :data="data"
+            :pullup="pullup"
+            @scrollToEnd="loadData">
+      <ul class="content list-wrapper">
+        <li v-for="item in data" class="list-item border-1px" @click="showNewsDetail">
+          <img src="" alt="" class="left-img">
+          <div class="item-right">
+            <div class="title-wrapper">
+              <h3 class="item-h3-title">{{item.fullTitle}}</h3>
+            </div>
+            <span class="author">作者：{{item.author}}</span>
+            <span class="update-time">{{item.createOn}}</span>
+          </div>
+        </li>
+      </ul>
+    </scroll>
+    <div class="loading-wrapper" v-if="pullUpFlag">显示更多~</div>
+    <div class="loading-wrapper" v-else >没有更多了~</div>
+  </div>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import vheader from '../Header/Header'
+//  import BScroll from 'better-scroll'
+  import axios from 'axios'
+  import qs from 'qs'
+  export default{
+    components: {
+      vheader
+    },
+    data() {
+      return {
+        listData: [],
+        data: [],
+        pullup: true,
+        pullUpFlag: true,
+        pageSize: 2,
+        pageNum: 1
+      }
+    },
+    created() {
+      this.loadData()
+    },
+    methods: {
+      loadData() {
+        if (this.pullUpFlag) {
+          console.log(`pages== ` + this.pageNum)
+          axios.post('/publicNews/queryByPage', qs.stringify({
+            pageNum: this.pageNum,
+            pageSize: this.pageSize
+          })).then(res => {
+            this.data = res.data.list.concat(this.data)
+            if (this.pageNum < res.data.pages) {
+              this.pageNum++
+            } else {
+              this.pullUpFlag = false
+            }
+          })
+        }
+      },
+      showNewsDetail() {
+        this.$router.push({name: 'CompanyNewsDetail'})
+      }
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scope>
+  @import url('../../common/less/index.less');
+  .wrapper{
+    height: 500px;
+  }
+  .loading-wrapper{
+    text-align: center;
+  }
+  .list-h2-title{
+    margin: 0 20px;
+    font-size: 17px;
+    line-height: 55px;
+  }
+  .list-content{
+    margin: 10px 20px;
+    .list-item{
+      min-height: 400px;
+      list-style: none;
+      display:flex;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      &:first-child{
+          padding-top: 0;
+       }
+      .left-img{
+        flex: 0 0 145px;
+        margin-right: 15px;
+        height: 80px;
+      }
+      .item-right{
+        flex:1;
+        .title-wrapper{
+          height: 55px;
+          overflow: hidden;
+        }
+        .item-h3-title{
+          font-size: 12px;
+        }
+        .author,.update-time{
+          font-size: 9px;
+          color: #666;
+          vertical-align: bottom;
+        }
+        .author{
+          display: inline-block;
+          max-width: 75px;
+          margin-right: 5px;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+</style>

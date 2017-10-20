@@ -1,0 +1,102 @@
+<template lang="html">
+  <div class="sort layer-wrapper">
+    <div class="layer-left" @click="close"></div>
+    <div class="layer-container">
+      <div class="group-kind">排序</div>
+      <div class="item-group" v-for="item in sortList">
+        <div class="series-cell" :class="{'active': currentSort === item.id}" @click="getSort(item.id)">{{item.text}}</div>
+      </div>
+    </div>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+  const type1 = [
+    {
+      id: '-1',
+      text: '默认'
+    },
+    {
+      id: 1,
+      text: '从车价由低到高'
+    },
+    {
+      id: 2,
+      text: '按车价由高到低'
+    },
+    {
+      id: 3,
+      text: '按车龄由低到高'
+    },
+    {
+      id: 4,
+      text: '按车龄由高到低'
+    },
+    {
+      id: 5,
+      text: '按里程由低到高'
+    },
+    {
+      id: 6,
+      text: '按里程由高到低'
+    }
+  ]
+  const type2 = [
+    {
+      id: '-1',
+      text: '默认'
+    },
+    {
+      id: 1,
+      text: '从车价由低到高'
+    },
+    {
+      id: 2,
+      text: '按车价由高到低'
+    }
+  ]
+  export default{
+    data() {
+      return {
+        base: true,
+        index: this.$store.state.carTypeTitle,
+        currentSort: this.$store.state.sort,
+        sortList: []
+      }
+    },
+    created() {
+      this.getType()
+    },
+    methods: {
+      getType() {
+        if (this.index === 0) {
+          this.sortList = type1
+        } else {
+          this.sortList = type2
+        }
+      },
+      close() {
+        this.$emit('close', false)
+      },
+      getSort(val) {
+        this.$emit('sort', val)
+        this.$store.commit('SORT', {sort: val})
+      }
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less">
+  @import url('../../common/less/index.less');
+  .sort{
+    .series-cell{
+      height: 44px;
+      line-height: 44px;
+      margin-left: 16px;
+      font-size: 12px;
+      color: #666;
+    .border-1px();
+    }
+    .active{
+      color: #ea5441;
+    }
+  }
+</style>

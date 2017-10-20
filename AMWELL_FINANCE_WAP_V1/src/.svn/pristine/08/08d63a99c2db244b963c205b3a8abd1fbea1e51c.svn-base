@@ -1,0 +1,53 @@
+<template>
+  <div class="first-page">
+    <div class="swiper-wrapper">
+      <swiper loop auto :list="swiperList" height="180px" @on-index-change="onIndexChange" dots-position="center"></swiper>
+    </div>
+  </div>
+</template>
+<script>
+  import {reqIp} from '../../common/js/reqIp'
+  import { Swiper, GroupTitle, SwiperItem, XButton, Divider } from 'vux'
+  const baseList = [{
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/5.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }]
+  export default {
+    data() {
+      return {
+        swiperList: baseList,
+        swiperIndex: 0
+      }
+    },
+    created() {
+    },
+    mounted() {
+      reqIp()
+    },
+    methods: {
+      onIndexChange(index) {
+        this.swiperIndex = index
+      }
+    },
+    components: {
+      Swiper,
+      GroupTitle,
+      SwiperItem,
+      XButton,
+      Divider
+    }
+  }
+</script>
+
+<style lang="less" rel="stylesheet/less" scope>
+
+</style>

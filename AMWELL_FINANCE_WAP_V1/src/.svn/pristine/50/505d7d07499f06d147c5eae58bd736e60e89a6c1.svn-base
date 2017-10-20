@@ -1,0 +1,395 @@
+<template lang="html">
+  <div class="second-hand">
+    <section class="swiper-wrapper">
+      <swiper loop auto :list="swiperList" height="180px" @on-index-change="onIndexChange" dots-position="center"></swiper>
+    </section>
+    <section class="car-des">
+      <h2 class="car-name">{{baseInfoList.carName}}</h2>
+      <div class="shop-addr">门店名称：<span>{{baseInfoList.carOwnerName}}</span></div>
+      <div class="price-ct">
+        <div class="car-price">价格：<em class="price">{{baseInfoList.guidePrice}}</em>万</div>
+        <div class="look-car-btn" @click="showApplyBox">立即咨询</div>
+      </div>
+    </section>
+    <div class="car-info-space"></div>
+    <section class="car-info">
+      <h2 class="car-detail-title">车辆信息</h2>
+      <div class="car-detail-ct">
+        <div class="cell-wrapper" v-for="(li,index) in carConfigList" :class="{'cell-wrapper-active': currentConfigBox === index}" @click="showDetail($event,index)">
+          <div class="cell-title">
+            <div class="item-name">{{li.title}}</div>
+            <img src="./arrow.png">
+          </div>
+          <div class="cell-box" >
+            <div class="z-cell-car-detail">
+              <span class="circleFill"></span>
+              <span>标配</span>
+              <span class="circle"></span>
+              <span>选配</span>
+              <span class="line"></span>
+              <span>无</span>
+            </div>
+            <div class="sub-item" v-for="item in li.content">
+              <span class="cell-box-title" >{{item.name}}</span>
+              <span class="cell-ct">{{item.val}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="car-advantage">
+      <h2 class="car-detail-title">车型亮点</h2>
+      <ul>
+        <li v-for="li in baseInfoList.list" class="car-advantage-list">
+          <img :src="li.ftpImgIntroUrl" alt="" class="car-advantage-img">
+          <h3 class="car-advantage-title">{{li.cTitle}}</h3>
+          <p class="car-advantage-des">{{li.cContent}}</p>
+        </li>
+      </ul>
+    </section>
+    <div v-transfer-dom>
+      <x-dialog :show.sync="applyBox" class="dialog-demo">
+        <div class="input-box">
+          <input v-model="userName" placeholder="申请人名称" maxlength="11">
+          <input v-model="userPhone" placeholder="申请人联系电话" maxlength="11">
+          <div class="apply-btn" @click="postMsg">立刻申请</div>
+        </div>
+        <div @click="close">
+          <span class="vux-close"></span>
+        </div>
+      </x-dialog>
+    </div>
+    <div v-transfer-dom>
+      <alert v-model="show" :title="title">{{showMsg}}</alert>
+    </div>
+  </div>
+
+</template>
+<script type="text/ecmascript-6">
+  import axios from 'axios'
+  import qs from 'qs'
+  import { Swiper, GroupTitle, SwiperItem, XButton, Divider, Cell, Group, CellFormPreview, CellBox, XInput, XDialog, TransferDomDirective as TransferDom, Icon, Alert } from 'vux'
+  export default{
+    directives: {
+      TransferDom
+    },
+    data() {
+      return {
+        showMsg: '',
+        title: '',
+        show: false,
+        userName: '',
+        userPhone: '',
+        applyBox: false,
+        swiperList: [], // 图片信息
+        swiperIndex: 0,
+        showContent002: false,
+        baseInfoList: [], //  基本信息
+        currentConfigBox: -1, // 当前点击展开详情
+        carConfigList: [] //  车辆信息
+      }
+    },
+    created() {
+      this.getBaseInfo()
+      this.getImgInfo()
+    },
+    methods: {
+      close() {
+        this.applyBox = false
+        this.userName = ''
+        this.userPhone = ''
+      },
+      postMsg() {
+        axios.post('/publicCar/addCarImportApply', qs.stringify({
+          carSecondHandId: this.$store.state.currentDetailId,
+          reservationName: this.userName,
+          reservationTel: this.userPhone
+        })).then(res => {
+          this.applyBox = false
+          this.userName = ''
+          this.userPhone = ''
+          if (res.data.success) {
+            this.title = '提交成功！'
+            this.showMsg = '请耐心等待工作人员与您联系。'
+            this.showPluginAuto()
+          } else {
+            this.title = '提交失败！'
+            this.showMsg = res.data.msg
+            this.showPluginAuto()
+          }
+        })
+      },
+      showDetail(event, index) {
+        let dom = event.currentTarget
+        console.log(dom.offsetHeight)
+        if (this.currentConfigBox === index) {
+          this.currentConfigBox = -1
+        } else {
+          this.currentConfigBox = index
+        }
+      },
+      getBaseInfo() {
+        axios.post('/publicCar/carImportById', qs.stringify({
+          id: this.$store.state.currentDetailId
+        })).then(res => {
+          this.baseInfoList = res.data
+          this.getImgConfig(res.data.carBasicConfigId)
+        })
+      },
+      getImgInfo() {
+        axios.post('/publicCar/queryImportByInfo', qs.stringify({
+          id: this.$store.state.currentDetailId
+        })).then(res => {
+          let list = []
+          for (let i = 0; i < res.data.length; i++) {
+            list.push({
+              url: 'javascript:',
+              img: res.data[i].ftpImgIntroUrl
+            })
+          }
+          this.swiperList = list
+        })
+      },
+      getImgConfig(id) {
+        axios.post('/carConfig/queryCarOverallConfig', qs.stringify({
+          id: id
+        })).then(res => {
+          console.log(res.data)
+          this.carConfigList = res.data
+        })
+      },
+      onIndexChange(index) {
+        this.swiperIndex = index
+      },
+      showApplyBox() {
+        this.applyBox = true
+      },
+      showPostAlert() {
+        this.show = true
+      },
+      showPluginAuto() {
+        this.showPostAlert()
+        setTimeout(() => {
+          this.show = false
+          this.userName = ''
+          this.userPhone = ''
+        }, 3000)
+      }
+    },
+    components: {
+      Swiper,
+      GroupTitle,
+      SwiperItem,
+      XButton,
+      Divider,
+      Cell,
+      Group,
+      CellFormPreview,
+      CellBox,
+      XInput,
+      XDialog,
+      Icon,
+      Alert
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less">
+  @import url('../../common/less/index.less');
+  @import '~vux/src/styles/close';
+  .car-advantage{
+  .car-advantage-img{
+    height: 150px;
+  }
+  .car-advantage-title, .car-advantage-des{
+    padding: 0 15px;
+  }
+  .car-advantage-title{
+    font-size: 14px;
+  }
+  .car-advantage-des{
+    font-size:12px;
+  }
+  }
+  .cell-wrapper{
+  .border-1px();
+    margin-left: 10px;
+  .cell-title{
+    position: relative;
+    display: flex;
+    height: 40px;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+  .border-1px();
+  .item-name{
+    line-height: 1;
+    font-size: 14px;
+  }
+  img{
+    width: 16px;
+    height: 9px;
+    margin-right: 20px;
+  }
+  }
+  .cell-box{
+    height:0;
+    margin-bottom: 10px;
+    background: #fff;
+    overflow: hidden;
+    transition: height .3s ease;
+  .sub-item{
+  .border-1px();
+    margin: 0 10px;
+    display: flex;
+    height: 35px;
+    line-height: 35px;
+    font-size: 12px;
+  .cell-box-title{
+    flex: 0 0 200px;
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .cell-ct{
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  }
+  }
+  }
+  .cell-wrapper-active{
+  .cell-box{
+    height: auto;
+  }
+  img{
+    transform: rotate(180deg) !important;
+  }
+  }
+  .second-hand{
+  .car-des{
+    margin: 15px;
+  }
+  .car-name{
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .shop-addr{
+    font-size: 12px;
+    line-height: 27px;
+  }
+  .price-ct{
+    display: flex;
+    margin-top: 10px;
+  .car-price{
+    flex: 1;
+  }
+  .look-car-btn{
+    flex: 0 0 64px;
+    width: 64px;
+    color: #fff;
+    height: 25px;
+    line-height:25px;
+    font-size: 11px;
+    text-align: center;
+    border-radius: 3px;
+  .bg-base-r-l;
+  }
+  }
+  .car-price{
+    color: #ff3c3c;
+    font-size: 14px;
+  .price{
+    font-style: normal;
+    font-size: 17px;
+    font-weight: 800;
+  }
+  }
+  }
+  .car-info-space{
+    height: 15px;
+    width: 100%;
+    background: #f5f5f5;
+  }
+  .car-detail-title{
+    font-size: 17px;
+    font-weight: 800;
+    margin-left: 17px;
+    line-height: 50px;
+  }
+  .car-detail-ct{
+    margin-left: 17px;
+  }
+  .weui-cells{
+    font-size: 14px !important;
+  }
+  .z-cell-car-detail{
+    position: relative;
+    font-size: 12px;
+    line-height: 40px;
+    text-align: right;
+    margin: 0 10px;
+  .border-1px();
+  .circle, .circleFill{
+    box-sizing: border-box;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .circleFill{
+    background-color: #1A1A1A;
+  }
+  .circle{
+    border: 1px solid #1A1A1A;
+  }
+  .line{
+    display: inline-block;
+    width: 10px;
+    height: 2px;
+    background: #1A1A1A;
+    transform: translateY(-3px);
+  }
+  span{
+  &:last-child{
+     margin-right: 15px;
+   }
+  }
+  }
+  .cell-box-title{
+    min-width: 70px;
+    display: inline-block;
+  }
+  .input-box{
+    height: 150px;
+    padding: 20px 15px;
+    text-align: center;
+    overflow: hidden;
+  input{
+    box-sizing: border-box;
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    text-indent: 10px;
+    outline: none;
+  }
+  .apply-btn{
+    width: 100%;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    border-radius: 5px;
+    color: #fff;
+  .bg-base-r-l();
+  }
+  }
+  .vux-close {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+</style>

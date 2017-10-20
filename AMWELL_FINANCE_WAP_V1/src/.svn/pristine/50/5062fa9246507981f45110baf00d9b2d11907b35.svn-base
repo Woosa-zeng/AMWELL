@@ -1,0 +1,88 @@
+import Vue from 'vue'
+import Router from 'vue-router'
+import store from '../store/store'
+
+Vue.use(Router)
+
+const router = new Router({
+  routes: [
+    {
+      path: '/',
+      name: 'Index',
+      component: (resolve) => {
+        require(['@/components/Index/Index.vue'], resolve)
+      }
+    },
+    {
+      path: '/index',
+      name: 'Index',
+      component: (resolve) => {
+        require(['@/components/Index/Index.vue'], resolve)
+      }
+    },
+    {
+      path: '/car-deal',
+      name: 'CarDeal',
+      component: (resolve) => {
+        require(['@/components/CarDeal/CarDeal.vue'], resolve)
+      }
+    },
+    {
+      path: '/car-rental-service',
+      name: 'CarRentalService',
+      component: (resolve) => {
+        require(['@/components/CarRentalService/CarRentalService.vue'], resolve)
+      }
+    },
+    {
+      path: '/car-financial',
+      name: 'CarFinancial',
+      component: (resolve) => {
+        require(['@/components/CarFinancial/CarFinancial.vue'], resolve)
+      }
+    },
+    {
+      path: '/cloud-service',
+      name: 'CloudService',
+      component: (resolve) => {
+        require(['@/components/CloudService/CloudService.vue'], resolve)
+      }
+    },
+    {
+      path: '/activities',
+      name: 'ActivitiesList',
+      component: (resolve) => {
+        require(['@/components/ActivitiesList/ActivitiesList.vue'], resolve)
+      }
+    },
+    {
+      path: '/activities-detail',
+      name: 'ActivitiesDetail',
+      component: (resolve) => {
+        require(['@/components/ActivitiesDetail/ActivitiesDetail.vue'], resolve)
+      }
+    },
+    {
+      path: '/news',
+      name: 'NewsList',
+      component: (resolve) => {
+        require(['@/components/NewsList/NewsList.vue'], resolve)
+      }
+    },
+    {
+      path: '/news-detail',
+      name: 'CompanyNewsDetail',
+      component: (resolve) => {
+        require(['@/components/CompanyNewsDetail/CompanyNewsDetail.vue'], resolve)
+      }
+    }
+  ]
+})
+router.beforeEach(function(to, from, next) {
+  store.commit('updateLoadingStatus', {isLoading: true})
+  next()
+})
+router.afterEach(function(to) {
+  store.commit('updateLoadingStatus', {isLoading: false})
+})
+export default router

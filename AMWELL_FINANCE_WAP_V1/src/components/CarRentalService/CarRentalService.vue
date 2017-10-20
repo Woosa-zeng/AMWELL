@@ -1,0 +1,163 @@
+<template lang="html">
+<div class="car-rental-service">
+  <section class="top-header">
+    <div class="header">租赁公司数据库</div>
+    <search
+      @result-click="resultClick"
+      @on-change="getResult"
+      :results="results"
+      v-model="value"
+      :autoFixed="false"
+      @on-focus="onFocus"
+      @on-cancel="onCancel"
+      ref="search"></search>
+    <div class="list-title">
+      <div class="company-name-title">公司名称</div>
+      <div class="phone-title">联系电话</div>
+    </div>
+  </section>
+  <section class="list-data-wrapper">
+    <scroll class="wrapper"
+            :data="listData"
+            :pullup="pullup"
+            @scrollToEnd="searchCar">
+      <ul class="item-wrapper">
+        <li class="list-item" v-for="li in listData">
+          <div class="company-name">{{li.companyName}}</div>
+          <div class="phone"><a :href="'tel:' + li.mobilePhone">{{li.mobilePhone}}</a></div>
+        </li>
+      </ul>
+    </scroll>
+  </section>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import { Search } from 'vux'
+  import axios from 'axios'
+  import qs from 'qs'
+  export default{
+    data() {
+      return {
+        value: '',
+        results: [],
+        listData: [],
+        pullup: true,
+        pullUpFlag: true,
+        pageNum: 1
+      }
+    },
+    created() {
+      this.searchCar()
+    },
+    mounted() {
+    },
+    methods: {
+      setFocus() {
+        this.$refs.search.setFocus()
+      },
+      resultClick(item) {
+        console.log(item)
+      },
+      getResult(val) {
+        this.pullUpFlag = true
+        this.pageNum = 1
+        if (val.length) {
+          console.log(`getResult === ${val}`)
+        }
+        this.searchCar(val)
+      },
+      onFocus() {
+        console.log('on focus')
+      },
+      onCancel() {
+        console.log('on cancel')
+        this.pageNum = 1
+        this.pullUpFlag = true
+        this.searchCar()
+      },
+      searchCar(text) {
+        if (this.pullUpFlag) {
+          axios.post('/mgrStore/queryStorePage', qs.stringify({
+            cityName: window.localStorage.getItem('cname'),
+            companyName: text || '',
+            pageNum: this.pageNum,
+            pageSize: 20
+          })).then(res => {
+            if (this.pageNum === 1) {
+              this.listData = res.data.list
+            } else {
+              this.listData = this.listData.concat(res.data.list)
+            }
+            if (this.pageNum < res.data.pages) {
+              this.pageNum++
+            } else {
+              this.pullUpFlag = false
+            }
+            console.log(res.data)
+          })
+        }
+      }
+    },
+    components: {
+      Search
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scoped>
+  @import url('../../common/less/index.less');
+  .car-rental-service{
+    height: 100%;
+    .top-header{
+    }
+    .header{
+      height: 45px;
+      line-height: 45px;
+      background: #ea5441;
+      text-align: center;
+      color:#fff;
+      font-size: 16px;
+    }
+    .list-title{
+      display: flex;
+      line-height: 40px;
+      font-size: 14px;
+      text-align: center;
+      .border-1px();
+      .company-name-title{
+        flex: 1;
+      }
+      .phone-title{
+        flex: 0 0 150px;
+        width: 150px;
+      }
+    }
+    .list-data-wrapper{
+      margin: 0 10px;
+      overflow: hidden;
+      .item-wrapper{
+        margin-right: 10px;
+      }
+      .list-item{
+        display: flex;
+        line-height: 40px;
+        font-size: 12px;
+        text-align: center;
+        .border-1px();
+        &:last-child{
+          .border-none();
+         }
+        .company-name{
+          flex: 1;
+          text-align: left;
+        }
+        .phone{
+          flex: 0 0 100px;
+          width: 100px;
+        }
+      }
+    }
+  }
+  .wrapper{
+    height: 450px;
+  }
+</style>

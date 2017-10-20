@@ -1,0 +1,18 @@
+<template lang="html">
+<div class="car-type layer">
+  <div class="layer-left"></div>
+  <div class="layer-content"></div>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  export default{
+    data() {
+      return {}
+    },
+    created() {},
+    methods: {}
+  }
+</script>
+<style lang="less" rel="stylesheet/less">
+
+</style>

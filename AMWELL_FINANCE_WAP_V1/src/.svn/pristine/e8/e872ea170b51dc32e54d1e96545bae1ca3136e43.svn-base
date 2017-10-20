@@ -1,0 +1,36 @@
+// The Vue build version to load with the `import` command
+// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+import Vue from 'vue'
+import FastClick from 'fastclick' // 点击延迟
+import router from './router'
+import App from './App'
+import echarts from 'echarts'
+import axios from 'axios'
+import qs from 'qs'
+import store from './store/store'
+import scroll from './components/Scroll/Scroll'
+
+Vue.prototype.$echarts = echarts
+Vue.prototype.getCount = getCount // 筛选里获取Count
+Vue.component('scroll', scroll)
+FastClick.attach(document.body)
+
+Vue.config.productionTip = false
+/* eslint-disable no-new */
+new Vue({
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app-box')
+
+function getCount() {
+  axios.post('/carSecondHandInfo/queryCarSecondHandInfoCount', qs.stringify({
+    brandId: this.$store.state.carBrand,
+    seriesId: this.$store.state.carSeriesId,
+    startPrice: this.$store.state.priceStart,
+    endPrice: this.$store.state.priceEnd,
+    carLevel: this.$store.state.carType
+  })).then(res => {
+    this.$store.commit('COUNT', {count: res.data.count})
+  })
+}

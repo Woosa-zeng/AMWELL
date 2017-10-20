@@ -1,0 +1,104 @@
+<template lang="html">
+  <div class="car-list">
+    <div class="car-list-item">
+      <div class="item-left">
+        <div class="img-ct">
+          <img>
+          <span class="left-icon">二手车</span>
+        </div>
+      </div>
+      <div class="item-right">
+        <h2 class="list-item-title">途胜 2015款 1.6T 双离合两驱两驱
+          智能型型</h2>
+        <p class="list-item-des">
+          门店名称：深圳市合和汽车服务有限公司
+        </p>
+        <div class="list-price">价格：
+          <em class="price">28.23</em>
+          万
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+  export default{
+    props: {
+      carType: {
+        type: Number
+      }
+    },
+    data() {
+      return {}
+    },
+    watch: {
+      carType: function(val) {
+        this.searchCar()
+      }
+    },
+    created() {
+      this.searchCar()
+    },
+    methods: {
+      searchCar() {
+        console.log(this.carType)
+      }
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scope>
+  @import url('../../common/less/index.less');
+.car-list{
+  margin: 0 16px;
+  .car-list-item{
+    display: flex;
+    min-height: 95px;
+    .border-1px();
+    .item-left{
+      flex: 0 0 118px;
+      width: 118px;
+      .img-ct{
+        position: relative;
+        margin: 10px 15px 10px 0;
+      }
+      .left-icon{
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        padding: 2px 4px;
+        font-size: 9px;
+        color: #fff;
+        line-height: 20px;
+        background: #ea5441;
+      }
+    }
+    .item-right{
+      flex: 1;
+      padding: 8px 0;
+      position: relative;
+      .list-item-title{
+        font-size: 14px;
+        line-height: 18px;
+      }
+      .list-item-des{
+        font-size: 11px;
+        color: #666;
+        line-height: 18px;
+      }
+      .list-price{
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        font-size: 11px;
+        color: #ff3c3c;
+        .price{
+          font-style: normal;
+          font-size: 14px;
+          font-weight: 800;
+        }
+      }
+    }
+  }
+}
+</style>

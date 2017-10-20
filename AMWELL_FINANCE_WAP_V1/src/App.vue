@@ -1,0 +1,208 @@
+<template>
+  <div id="app" style="height: 100%;">
+    <div class="app-content">
+      <router-view></router-view>
+    </div>
+    <section>
+      <div class="bottom-space"></div>
+    </section>
+    <tabbar>
+      <tabbar-item selected link="/index">
+        <!--<img slot="icon" src="./common/img/hone_default@2x.png">-->
+        <!--<img slot="icon-active" src="./common/img/hone_preaaed@2x.png">-->
+        <span slot="label">首页</span>
+      </tabbar-item>
+      <tabbar-item link="/car-deal">
+        <!--<img slot="icon" src="./common/img/qichejiaoyi_default@2x.png">-->
+        <!--<img slot="icon-active" src="./common/img/qichejiaoyi_preaaed@2x.png">-->
+        <span slot="label">买车卖车</span>
+      </tabbar-item>
+      <tabbar-item link="/car-financial">
+        <!--<img slot="icon" src="./common/img/qichejinrong_default@2x.png">-->
+        <!--<img slot="icon-active" src="./common/img/qichejinrong_preaaed@2x.png">-->
+        <span slot="label">车贷服务</span>
+      </tabbar-item>
+      <tabbar-item link="/car-rental-service">
+        <!--<img slot="icon" src="./common/img/zuchefuwu_default@2x.png">-->
+        <!--<img slot="icon-active" src="./common/img/zuchefuwu_preaaed@2x.png">-->
+        <span slot="label">租车服务</span>
+      </tabbar-item>
+      <tabbar-item link="/cloud-service">
+        <!--<img slot="icon" src="./common/img/Clouds_default@2x.png">-->
+        <!--<img slot="icon-active" src="./common/img/Clouds_preaaed@2x.png">-->
+        <span slot="label">租贷管理</span>
+      </tabbar-item>
+    </tabbar>
+    <loading v-model="isLoading"></loading>
+  </div>
+</template>
+<script>
+import { Loading, Tabbar, TabbarItem } from 'vux'
+import { mapState } from 'vuex'
+export default {
+  components: {
+    Loading,
+    Tabbar,
+    TabbarItem
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading
+    })
+  },
+  create() {
+    console.log(this.isLoading)
+  }
+}
+</script>
+
+<style lang="less">
+@import '~vux/src/styles/reset.less';
+@import './assets/theme.less';
+@import url('./common/less/index.less');
+.weui-cells{
+  font-size: 14px !important;
+}
+.vux-label{
+  font-size: 14px !important;
+}
+.vux-tabbar-simple .weui-tabbar__label{
+  font-size: 24px;
+  font-weight: 800;
+}
+#app {
+  font-family: "PingFang SC",Arial,sans-serif;
+}
+body {
+  background-color: #eeeff3;
+  .app-content{
+    background-color: #fff;
+  }
+}
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  .vux-tab-ink-bar {
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ea5441;
+    text-align: center;
+  }
+}
+.border-1px{
+  .border-1px;
+}
+.space{
+  width: 44px;
+  height: 2px;
+  margin: 12px auto;
+.bg-base-l-r;
+}
+.bottom-space{
+  height: 50px;
+  width: 100%;
+  visibility: hidden;
+}
+.copyright {
+  font-size: 12px;
+  color: #ccc;
+  text-align: center;
+}
+.text-scroll {
+  border: 1px solid #ddd;
+  border-left: none;
+  border-right: none;
+}
+.text-scroll p{
+  font-size: 12px;
+  text-align: center;
+  line-height: 30px;
+}
+.black {
+  background-color: #000;
+}
+.title{
+  line-height: 100px;
+  text-align: center;
+  color: #fff;
+}
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+.vux-indicator.custom-bottom {
+  bottom: 30px;
+}
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fadeInUp {
+  animation-name: fadeInUp;
+}
+.swiper-demo-img img {
+  width: 100%;
+}
+/* tabbar start*/
+.weui-tabbar__label{
+  color: #ea5441 !important;
+}
+.weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon, .weui-tabbar__item.weui-bar__item_on .weui-tabbar__icon > i, .weui-tabbar__item.weui-bar__item_on .weui-tabbar__label{
+  color: #fff !important;
+  background: #ea5441;
+}
+/* tabbar end*/
+
+.layer-wrapper{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: scroll;
+  z-index: 9999;
+}
+.layer-left{
+  float: left;
+  width: 20%;
+  height: 100%;
+  background: rgba(204,204,204,.9);
+  background-size: 100%;
+  background-repeat: repeat-y;
+}
+.layer-container{
+  float: left;
+  width: 80%;
+  height: 100%;
+  background-color: #fff;
+  overflow: scroll;
+}
+.group-kind{
+  box-sizing: border-box;
+  padding-left: 16px;
+  background-color: #f5f5f5;
+  height: 24px;
+  line-height: 24px;
+  font-size: 12px;
+  color: #999;
+}
+</style>

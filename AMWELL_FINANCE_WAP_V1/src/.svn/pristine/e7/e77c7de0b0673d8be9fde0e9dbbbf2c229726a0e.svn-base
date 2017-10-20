@@ -1,0 +1,159 @@
+<template lang="html">
+<div class="car-deal">
+  <section class="swiper-wrapper">
+    <swiper loop auto :list="swiperList" height="180px" @on-index-change="onIndexChange" dots-position="center"></swiper>
+  </section>
+  <section>
+    <div class="deal-des">
+      <div class="header">
+        <h2 class="des-h2-title">汽车交易平台</h2>
+        <div class="space"></div>
+        <div class="des">提供“定制化”方案 +“一站式”服务</div>
+      </div>
+      <div class="deal-content">
+        <div class="ct-wrapper">
+          <div class="item-cell">
+            <img src="./cardeal_1.png">
+            <h3 class="des-h3-title">我要买车</h3>
+            <p class="item-text">首付低 专业的二手车评估90后也能轻松买好车！</p>
+            <div class="z-short-btn" @click="selectCar(0)">更多</div>
+          </div>
+          <div class="item-cell">
+            <img src="./cardeal_2.png">
+            <h3 class="des-h3-title">我要卖车</h3>
+            <p class="item-text">车价高、服务全，多种方式供你选择！</p>
+            <div class="z-short-btn" @click="goSellCar">更多</div>
+          </div>
+        </div>
+        <div class="ct-wrapper">
+          <div class="item-cell">
+            <img src="./cardeal_3.png">
+            <h3 class="des-h3-title">新车</h3>
+            <p class="item-text">爆款新车，超低首付，好车生活随手可得！</p>
+            <div class="z-short-btn" @click="selectCar(1)">更多</div>
+          </div>
+          <div class="item-cell">
+            <img src="./cardeal_4.png">
+            <h3 class="des-h3-title">平行进口车</h3>
+            <p class="item-text">世界名车，价格钜惠，海量车型任您选！</p>
+            <div class="z-short-btn" @click="selectCar(2)">更多</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import {reqIp} from '../../common/js/reqIp'
+  import { Swiper, GroupTitle, SwiperItem, XButton, Divider } from 'vux'
+  const baseList = [{
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/1.jpg'
+  }, {
+    url: 'javascript:',
+    img: 'https://static.vux.li/demo/2.jpg'
+  }]
+  export default{
+    data() {
+      return {
+        swiperList: baseList,
+        swiperIndex: 0
+      }
+    },
+    created() {},
+    mounted() {
+      reqIp()
+    },
+    methods: {
+      selectCar(id) {
+        this.$store.commit('CAR_TYPE', {carType: id})
+        this.$router.push({name: 'SelectCar'})
+      },
+      goSellCar() {
+        this.$router.push({name: 'SellCar'})
+      },
+      onIndexChange(index) {
+        this.swiperIndex = index
+      }
+    },
+    components: {
+      Swiper,
+      GroupTitle,
+      SwiperItem,
+      XButton,
+      Divider
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scope>
+  @import url('../../common/less/index.less');
+  .deal-des{
+    width:100%;
+    .des-h2-title{
+      margin-top: 40px;
+      text-align: center;
+      font-size: 17px;
+    }
+    .des{
+      text-align: center;
+      font-size: 9px;
+    }
+    .deal-content{
+      margin: 30px 22px;
+      .ct-wrapper{
+        display: flex;
+        .item-cell{
+          flex: 1;
+          border-radius: 6px;
+          background: #fff;
+          box-shadow: 0 0 8px rgba(176, 178, 178, 0.32);
+          margin-bottom: 10px;
+          &:nth-child(odd){
+             margin-right:5px;
+           }
+          &:nth-child(even){
+             margin-left:5px;
+           }
+           img{
+             width:100%;
+             border-top-right-radius: 6px;
+             border-top-left-radius: 6px;
+             margin-bottom: 10px;
+           }
+          .des-h3-title{
+            line-height: 30px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+          }
+          .item-text{
+            text-align: center;
+            margin: 0 10px;
+            line-height: 20px;
+            font-size: 11px;
+            color: #666;
+          }
+          .z-short-btn{
+            width: 90px;
+            height:24px;
+            margin: 15px auto;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;
+            line-height: 24px;
+            font-size: 11px;
+            .bg-base-r-l;
+          }
+        }
+      }
+    }
+  }
+
+</style>

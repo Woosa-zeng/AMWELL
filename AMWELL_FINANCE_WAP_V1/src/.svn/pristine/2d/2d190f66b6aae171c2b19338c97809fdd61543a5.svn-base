@@ -1,0 +1,65 @@
+<template lang="html">
+<div class="activities-list">
+  <vheader></vheader>
+  <div class="border-1px"></div>
+  <h2 class="list-h2-title">活动专区</h2>
+  <div class="list-content">
+    <ul class="list-wrapper">
+      <li class="list-item border-1px" @click="showActivitiesDetail">
+        <img src="" alt="" class="item-img">
+        <div class="item-des">
+          <h3 class="item-h3-title">[用车福利] 免押金租车</h3>
+          <span class="activities-time">活动时间：2017-03-08 19:23  -  2017-03-08 19:23</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import vheader from '../Header/Header'
+  export default{
+    components: {
+      vheader
+    },
+    data() {
+      return {}
+    },
+    created() {},
+    methods: {
+      showActivitiesDetail() {
+        this.$router.push({name: 'ActivitiesDetail'})
+      }
+    }
+  }
+</script>
+<style lang="less" rel="stylesheet/less">
+  @import url('../../common/less/index.less');
+  .list-h2-title{
+    margin: 0 20px;
+    font-size: 17px;
+    line-height: 55px;
+  }
+  .list-content{
+    margin: 10px 20px;
+    .list-item{
+      list-style: none;
+      padding-bottom: 15px;
+      padding-top: 15px;
+      &:first-child{
+         padding-top: 0;
+       }
+      .item-img{
+        height: 133px;
+      }
+      .item-h3-title{
+        font-size: 15px;
+      }
+      .activities-time{
+        font-size: 11px;
+        color: #666;
+        vertical-align: bottom;
+      }
+    }
+  }
+</style>

@@ -1,0 +1,22 @@
+<template lang="html">
+<div class="news-detail">
+  <vheader></vheader>
+  <div class="border-1px"></div>
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import vheader from '../Header/Header'
+  export default{
+    components: {
+      vheader
+    },
+    data() {
+      return {}
+    },
+    created() {},
+    methods: {}
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scope>
+  @import url('../../common/less/index.less');
+</style>

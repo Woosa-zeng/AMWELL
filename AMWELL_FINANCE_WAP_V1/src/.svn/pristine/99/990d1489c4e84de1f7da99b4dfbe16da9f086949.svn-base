@@ -1,0 +1,21 @@
+<template lang="html">
+<div class="car-deal">
+  car-deal
+</div>
+</template>
+<script type="text/ecmascript-6">
+  import {reqIp} from '../../common/js/reqIp'
+  export default{
+    data() {
+      return {}
+    },
+    created() {},
+    mounted() {
+      reqIp()
+    },
+    methods: {}
+  }
+</script>
+<style lang="less" rel="stylesheet/less">
+
+</style>

@@ -1,0 +1,26 @@
+<template lang="html">
+  <div class="vheader">
+    <header>
+      <img src="./logo.png" alt="" width="78" height="24" class="logo-img">
+    </header>
+  </div>
+</template>
+<script type="text/ecmascript-6">
+  export default{
+    data() {
+      return {}
+    },
+    created() {},
+    methods: {}
+  }
+</script>
+<style lang="less" rel="stylesheet/less" scope>
+  header{
+    height: 40px;
+    .logo-img{
+      margin-top: 8px;
+      margin-left: 9px;
+    }
+  }
+
+</style>
